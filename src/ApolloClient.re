@@ -6,7 +6,7 @@ type mutationObj = {
   .
   "mutation": ReasonApolloTypes.queryString,
   "variables": Js.Json.t,
-  "refetchQueries": list(queryObj)
+  "refetchQueries": Js.Array.t(queryObj)
 };
 
 type generatedApolloClient = {

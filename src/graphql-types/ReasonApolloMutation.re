@@ -20,7 +20,7 @@ module MutationFactory = (InternalConfig: InternalConfig) => {
             "variables": mutation##variables,
             "refetchQueries":
               refetchQueries
-              |> List.map((q) => {"query": [@bs] gql(q##query), "variables": q##variables})
+              |> Js.Array.map((q) => {"query": [@bs] gql(q##query), "variables": q##variables})
           })
         )
         |> then_(
