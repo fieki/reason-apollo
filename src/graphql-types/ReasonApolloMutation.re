@@ -11,13 +11,14 @@ module MutationFactory = (InternalConfig: InternalConfig) => {
   type action =
     | Result(string)
     | Error(Js.Promise.error);
-  let sendMutation = (~mutation, ~reduce, ~refetchQueries) => {
+  let sendMutation = (~mutation, ~reduce, ~refetchQueries, ~update) => {
     let _ =
       Js.Promise.(
         resolve(
           InternalConfig.apolloClient##mutate({
             "mutation": [@bs] gql(mutation##query),
             "variables": mutation##variables,
+            "update": update,
             "refetchQueries":
               refetchQueries
               |> Js.Array.map((q) => {"query": [@bs] gql(q##query), "variables": q##variables})
@@ -50,8 +51,8 @@ module MutationFactory = (InternalConfig: InternalConfig) => {
       | Error(error) => ReasonReact.Update(Failed(error))
       },
     render: ({reduce, state}) => {
-      let mutate = (mutationFactory, refetchQueries) =>
-        sendMutation(~mutation=mutationFactory, ~reduce, ~refetchQueries);
+      let mutate = (mutationFactory, refetchQueries, update) =>
+        sendMutation(~mutation=mutationFactory, ~reduce, ~refetchQueries, ~update);
       children(mutate, state)
     }
   };
