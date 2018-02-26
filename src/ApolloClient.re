@@ -2,12 +2,19 @@ open ReasonApolloTypes;
 
 type queryObj = {. "query": ReasonApolloTypes.queryString, "variables": Js.Json.t};
 
+type proxyObj = {
+  readQuery: {. "query": ReasonApolloTypes.queryString} => Js.Json.t,
+  writeQuery: {. "query": ReasonApolloTypes.queryString} => unit
+};
+
+type updateCallback = (proxyObj, {. "data": Js.Json.t}) => unit;
+
 type mutationObj = {
   .
   "mutation": ReasonApolloTypes.queryString,
   "variables": Js.Json.t,
   "refetchQueries": Js.Array.t(queryObj),
-  "update": unit => unit
+  "update": updateCallback
 };
 
 type generatedApolloClient = {
